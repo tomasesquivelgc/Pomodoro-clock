@@ -1,4 +1,4 @@
-import {  } from 'react'
+import PomodoroClock from './components/PomodoroClock'
 import './App.css'
 
 function App() {
@@ -6,7 +6,7 @@ function App() {
 
   return (
     <>
-      
+      <PomodoroClock />
     </>
   )
 }
