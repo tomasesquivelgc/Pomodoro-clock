@@ -167,6 +167,7 @@ class PomodoroClock extends Component {
             {isRunning ? 'Pause' : 'Start'}
           </button>
           <button id="reset" onClick={this.resetTimer}>Reset</button>
+          <a href="https://github.com/tomasesquivelgc/Pomodoro-clock" className='codeLink'>Link to the code</a>
         </div>
       </>
     );
