@@ -55,67 +55,12 @@ class PomodoroClock extends Component {
     });
   };
 
-  render() {
-    const { currentTime, isRunning } = this.state;
+  formatTime = (timeInSeconds) => {
+    const minutes = Math.floor(timeInSeconds / 60).toString().padStart(2, '0');
+    const seconds = (timeInSeconds % 60).toString().padStart(2, '0');
+    return `${minutes}:${seconds}`;
+  };
 
-    return (
-      <div className='container'>
-        <h1>Pomodoro Clock</h1>
-        {/* Controls for session and break lengths */}
-        <div>
-          <div className='lengthControls'>
-            <div id="break-controls">
-              <p id="break-label">Break Length</p>
-              <div className='control'>
-                <button
-                  id="break-decrement"
-                  onClick={() => this.adjustTime('breakTime', -1)}
-                >
-                  Decrease
-                </button>
-                <p id="break-length">{this.state.breakTime / 60}</p>
-                <button
-                  id="break-increment"
-                  onClick={() => this.adjustTime('breakTime', 1)}
-                >
-                  Increase
-                </button>
-              </div>
-            </div>
-            <div id="session-controls">
-              <p id="session-label">Session Length</p>
-              <div className='control'>
-                <button
-                  id="session-decrement"
-                  onClick={() => this.adjustTime('workTime', -1)}
-                >
-                  Decrease
-                </button>
-                <p>{this.state.workTime / 60}</p>
-                <button
-                  id="session-increment"
-                  onClick={() => this.adjustTime('workTime', 1)}
-                >
-                  Increase
-                </button>
-              </div> 
-            </div>
-          </div>
-          {/* Display initial values of break and session lengths */}
-        </div>
-        {/* Countdown timer */}
-        <div>
-          <p>Time Remaining: {Math.floor(currentTime / 60)}:{currentTime % 60}</p>
-        </div>
-        <button onClick={isRunning ? this.pauseTimer : this.startTimer}>
-          {isRunning ? 'Pause' : 'Start'}
-        </button>
-        <button onClick={this.resetTimer}>Reset</button>
-      </div>
-    );
-  }
-
-  // Function to adjust session and break lengths
   adjustTime = (type, delta) => {
     if (!this.state.isRunning) {
       const newTime = this.state[type] + delta * 60;
@@ -127,6 +72,68 @@ class PomodoroClock extends Component {
       }
     }
   };
+
+  render() {
+    const { currentTime, isRunning } = this.state;
+
+    return (
+      <>
+        <div className='container'>
+          <h1>Pomodoro Clock</h1>
+          {/* Controls for session and break lengths */}
+          <div>
+            <div className='lengthControls'>
+              <div id="break-controls">
+                <p id="break-label">Break Length</p>
+                <div className='control'>
+                  <button
+                    id="break-decrement"
+                    onClick={() => this.adjustTime('breakTime', -1)}
+                  >
+                    Decrease
+                  </button>
+                  <p id="break-length">{this.state.breakTime / 60}</p>
+                  <button
+                    id="break-increment"
+                    onClick={() => this.adjustTime('breakTime', 1)}
+                  >
+                    Increase
+                  </button>
+                </div>
+              </div>
+              <div id="session-controls">
+                <p id="session-label">Session Length</p>
+                <div className='control'>
+                  <button
+                    id="session-decrement"
+                    onClick={() => this.adjustTime('workTime', -1)}
+                  >
+                    Decrease
+                  </button>
+                  <p id="session-length">{this.state.workTime / 60}</p>
+                  <button
+                    id="session-increment"
+                    onClick={() => this.adjustTime('workTime', 1)}
+                  >
+                    Increase
+                  </button>
+                </div> 
+              </div>
+            </div>
+          </div>
+          {/* Countdown timer */}
+          <div>
+            <p id="timer-label">Time Remaining</p>
+            <p id="time-left">{this.formatTime(currentTime)}</p>
+          </div>
+          <button id="start_stop" onClick={isRunning ? this.pauseTimer : this.startTimer}>
+            {isRunning ? 'Pause' : 'Start'}
+          </button>
+          <button id="reset" onClick={this.resetTimer}>Reset</button>
+        </div>
+      </>
+    );
+  }
 }
 
 export default PomodoroClock;
