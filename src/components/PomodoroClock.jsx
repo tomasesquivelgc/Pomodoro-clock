@@ -6,9 +6,12 @@ class PomodoroClock extends Component {
     this.state = {
       workTime: 25 * 60,  // Work time in seconds
       breakTime: 5 * 60,  // Break time in seconds
-      currentTime: 25 * 60,  // Current time in seconds
-      isRunning: false,  // To track if the timer is running
+      currentTime: 25 * 60,
+      isRunning: false,
+      isBreak: false, // Added to track if it's a break
     };
+    // Create a ref for the audio element
+    this.audioRef = React.createRef();
   }
 
   componentDidMount() {
@@ -31,12 +34,22 @@ class PomodoroClock extends Component {
         }));
       } else {
         // Timer has reached 0, switch to break or work time
-        if (this.state.workTime === this.state.currentTime) {
+        if (!this.state.isBreak) {
+          // Start a break countdown
+          this.playAudio(); // Play the audio when time is up
           alert('Time for a break!');
-          this.setState({ currentTime: this.state.breakTime });
+          this.setState({
+            currentTime: this.state.breakTime,
+            isBreak: true,
+          });
         } else {
+          // Start a session countdown
+          this.playAudio(); // Play the audio when time is up
           alert('Back to work!');
-          this.setState({ currentTime: this.state.workTime });
+          this.setState({
+            currentTime: this.state.workTime,
+            isBreak: false,
+          });
         }
       }
     }, 1000); // Update timer every 1 second
@@ -50,9 +63,28 @@ class PomodoroClock extends Component {
   resetTimer = () => {
     clearInterval(this.timerInterval);
     this.setState({
-      currentTime: this.state.workTime,
+      workTime: 25 * 60,
+      breakTime: 5 * 60,
+      currentTime: 25 * 60,
       isRunning: false,
+      isBreak: false,
     });
+    this.stopAudio(); // Stop and rewind the audio when reset
+  };
+
+  playAudio = () => {
+    // Play the audio
+    if (this.audioRef.current) {
+      this.audioRef.current.play();
+    }
+  };
+
+  stopAudio = () => {
+    // Stop and rewind the audio
+    if (this.audioRef.current) {
+      this.audioRef.current.pause();
+      this.audioRef.current.currentTime = 0;
+    }
   };
 
   formatTime = (timeInSeconds) => {
@@ -74,7 +106,8 @@ class PomodoroClock extends Component {
   };
 
   render() {
-    const { currentTime, isRunning } = this.state;
+    const { currentTime, isRunning, isBreak } = this.state;
+    const timerLabel = isBreak ? 'Break' : 'Session';
 
     return (
       <>
@@ -123,9 +156,13 @@ class PomodoroClock extends Component {
           </div>
           {/* Countdown timer */}
           <div>
-            <p id="timer-label">Time Remaining</p>
+            <p id="timer-label">{timerLabel} Time</p>
             <p id="time-left">{this.formatTime(currentTime)}</p>
           </div>
+          <audio id="beep" ref={this.audioRef}>
+            <source src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
           <button id="start_stop" onClick={isRunning ? this.pauseTimer : this.startTimer}>
             {isRunning ? 'Pause' : 'Start'}
           </button>
