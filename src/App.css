@@ -1,16 +1,65 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  max-width: 80vh; 
+  margin: 0 auto;
+  height: 80vh;
   justify-content: center;
   align-items: center;
   text-align: center;
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+  border: #007BFF 2px solid;
+  border-radius: 15px;
 }
+
 .lengthControls {
   display: flex;
+  justify-content: space-around;
+  margin-top: 20px; 
 }
 
 .control {
   display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
 
+button {
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:hover {
+  background-color: #007BFF;
+  color: white;
+}
+
+#time-left {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+#timer-label {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+#break-label,
+#session-label {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#break-length,
+#session-length {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 5px;
 }
